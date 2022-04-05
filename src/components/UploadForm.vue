@@ -25,6 +25,23 @@ export default {
             .then(function (data) {
                 // display a success message
                 console.log(data);
+                let status = document.getElementById('status')
+                if (data.type == 'good'){
+                status.className = "alert alert-success"
+                status.innerText = data.message
+                status.hidden = false
+                }
+                else if (data.type == 'bad'){
+                    status.className = "alert alert-danger"
+                    let mssg = `<ul>`
+                    data.errors.forEach(item => {
+                        mssg += `<li>${item}</li>`
+                    })
+                    mssg += `</ul>`
+                    status.innerHTML = mssg
+                    status.hidden = false
+                }
+                
             })
             .catch(function (error) {
                 console.log(error);
@@ -44,6 +61,10 @@ export default {
 </script>
 
 <template>
+
+    <div id="status" hidden>
+
+    </div>
 
     <form @submit.prevent="uploadPhoto" id="uploadForm" method="POST">
 

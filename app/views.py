@@ -48,7 +48,8 @@ def upload():
             res = {
                 "message": "File Upload Successful",
                 "filename": photoName,
-                "description": deescription
+                "description": deescription,
+                'type': 'good',
             }
 
             return jsonify(res)
@@ -56,7 +57,8 @@ def upload():
         else:
 
             err = {
-                "errors": form_errors(form)
+                "errors": form_errors(form),
+                'type': 'bad'
             }
 
             return jsonify(err)
