@@ -12,6 +12,7 @@ from werkzeug.utils import secure_filename
 import os
 from .forms import UploadForm
 import json
+from flask_wtf.csrf import generate_csrf
 
 ###
 # Routing for your application.
@@ -20,6 +21,11 @@ import json
 @app.route('/')
 def index():
     return jsonify(message="This is the beginning of our API")
+
+
+@app.route('/api/csrf-token', methods=['GET'])
+def get_csrf():
+    return jsonify({'csrf_token': generate_csrf()})
 
 
 ###
@@ -39,21 +45,21 @@ def upload():
             photoName = secure_filename(photo.filename)
             photo.save(os.path.join(app.config['UPLOAD_FOLDER'], photoName))
 
-            res = json.dumps({
+            res = {
                 "message": "File Upload Successful",
                 "filename": photoName,
                 "description": deescription
-            })
+            }
 
-            return res
+            return jsonify(res)
 
         else:
 
-            err = json.dumps({
+            err = {
                 "errors": form_errors(form)
-            })
+            }
 
-            return err
+            return jsonify(err)
 
 # Here we define a function to collect form errors from Flask-WTF
 # which we can later use
